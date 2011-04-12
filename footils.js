@@ -5,28 +5,28 @@
 		forEach = Array.prototype.forEach;
 		
 	// Set up our "util" module
-		Footils = (function () {
+	Footils = (function () {
+	
+		//	normally, we might do something important in here
+		return {
 		
-			//	normally, we might do something important in here
-			return {
-			
-				forEach: function( obj, fn, context ) {
-					context = context || this;
-					if ( forEach && obj.forEach ) {
-						return obj.forEach( fn, context );
-					}
-					for ( var prop in obj ) {
-						if ( obj.hasOwnProperty(prop) ) {
-							fn.call( context, obj[prop], prop );
-						}
-					}
+			forEach: function( obj, fn, context ) {
+				context = context || this;
+				if ( forEach && obj.forEach ) {
+					obj.forEach( fn, context );
 					return obj;
 				}
-
-			};
-
-
-		})();
+				for ( var prop in obj ) {
+					if ( obj.hasOwnProperty(prop) ) {
+						fn.call( context, obj[prop], prop );
+					}
+				}
+				return obj;
+			}
+			
+		};
+		
+	})();
 
 	global.Footils = global.F = Footils;
 })();

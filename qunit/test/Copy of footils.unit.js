@@ -4,7 +4,6 @@
 });*/
 
 test("foreach implementation", 5, function() {
-
 	// Touch every member of the included array
 	var foo = [1,2,3],
 		counter = 0;
@@ -46,3 +45,9 @@ test("foreach implementation", 5, function() {
 	foo2 = F.forEach(foo, function(value, index) {});
 	equal(foo, foo2, "F.forEach returns the object it iterates over");
 });
+
+// Accepts and array or object
+	// Accepts an apply function
+	// Accepts the context
+	
+	// Return: the object iterated over
