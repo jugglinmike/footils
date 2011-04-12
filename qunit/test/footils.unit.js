@@ -3,46 +3,65 @@
 	ok(true);
 });*/
 
-test("foreach implementation", 5, function() {
+test("foreach implementation", 8, function() {
 
-	// Touch every member of the included array
-	var foo = [1,2,3],
-		counter = 0;
+	var test_array = [3,4,5],
+		test_object = {
+			"first": 'a',
+			second: 'b',
+			"third": 'c'
+		},
+		copy = undefined,
+		counter = 0,
+		othercontext = {
+			counter: 0
+		};
 	
-	F.forEach(foo, function(value, index) {
+	// Touch every member of the target array
+	F.forEach(test_array, function(value, index) {
 		counter++;
 	});
-	equal(counter, foo.length, "F.forEach touches every member of the array");
+	equal(counter, test_array.length, "F.forEach touches every member of the target array");
 	
 	// Touch every member of the included object
-	var foo = {
-			"foobar": true,
-			bar: true,
-			"gasfka": true
-		},
-		counter = 0;
-	
-	F.forEach(foo, function(value, index) {
+	counter = 0;
+	F.forEach(test_object, function(value, index) {
 		counter++;
 	});
-	equal(counter, 3, "F.forEach touches every member of the object");
+	equal(counter, 3, "F.forEach touches every member of the target object");
 	
-	// Accepts an apply function
-	var foo = [1,2,3],
-		counter = 0;
-	F.forEach(foo, function(value, index) {
-		counter += value;
+	// Accepts and executes an apply function on the target array
+	counter = 0;
+	F.forEach(test_array, function(value, index) {
+		counter += index + value;
 	});
-	equal(counter, 6, "F.forEach accepts and executes an apply function");
+	equal(counter, 15, "F.forEach accepts and executes an apply function on the target array");
+	
+	// Accepts and executes an apply function on the target object
+	counter = '';
+	F.forEach(test_object, function(value, index) {
+		counter += index + value;
+	});
+	equal(counter, 'firstasecondbthirdc', "F.forEach accepts and executes an apply function on the target object");
 	
 	// Uses the supplied context
-	var othercontext = { counter: 0 };
-	F.forEach(foo, function(value, index) {
+	F.forEach(test_array, function(value, index) {
 		this.counter += value;
 	}, othercontext);
-	equal(othercontext.counter, 6, "F.forEach executes the supplied apply function in the given context");
+	equal(othercontext.counter, 12, "F.forEach executes its apply function in the given context on the target array");
 	
-	var foo2;
-	foo2 = F.forEach(foo, function(value, index) {});
-	equal(foo, foo2, "F.forEach returns the object it iterates over");
+	// Uses the supplied context
+	othercontext.counter = '';
+	F.forEach(test_object, function(value, index) {
+		this.counter += index + value;
+	}, othercontext);
+	equal(othercontext.counter, 'firstasecondbthirdc', "F.forEach executes its apply function in the given context on the target object");
+	
+	// Returns the array it iterates over
+	copy = F.forEach(test_array, function(value, index) {});
+	equal(test_array, copy, "F.forEach returns the array it iterates over");
+	
+	// Returns the object it iterates over
+	copy = F.forEach(test_object, function(value, index) {});
+	equal(test_object, copy, "F.forEach returns the object it iterates over");
 });
